@@ -42,7 +42,7 @@ router.post("/loging", async (req, res, next) => {
     if (passwordValid) {
       const token = toJWT({ id: user.id });
 
-      return res.status(200).send({ token: token });
+      return res.status(200).send({ token: token, email });
     } else {
       res.status(400).send({
         message: "Password was incorrect"

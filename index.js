@@ -1,13 +1,21 @@
 const express = require("express");
-const app = express();
-const port = process.env.PORT || 4000;
-const user = require("./src/user/router-user");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
+const user = require("./src/user/router-user");
+const room = require("./src/rooms/router-rooms");
+const { streamRouter, stream } = require("./src/stream/router");
+
+const app = express();
 const parserMiddleware = bodyParser.json();
+const port = process.env.PORT || 4000;
+
+app.use(cors());
 app.use(parserMiddleware);
 
 app.use(user);
+app.use(room);
+app.use(streamRouter);
 
 app.get("/test", (req, res) => {
   res.send("Hello");
