@@ -14,7 +14,7 @@ app.use(cors());
 app.use(parserMiddleware);
 
 app.use(user);
-app.use(room);
+app.use(room(stream));
 app.use(streamRouter);
 
 app.get("/test", (req, res) => {
