@@ -32,6 +32,18 @@ function factory(stream) {
     }
   });
 
+  router.get("/room/:id", (req, res, next) => {
+    const roomPicked = req.params.id;
+    console.log(roomPicked);
+    Room.findByPk(roomPicked).then(room => {
+      if (!room) {
+        res.status(404).send("room not found!");
+      } else {
+        res.json(room);
+      }
+    });
+  });
+
   return router;
 }
 
