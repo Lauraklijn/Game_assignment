@@ -3,6 +3,7 @@
 const Sse = require("json-sse"); // install + import sse nodejs
 const { Router } = require("express");
 const Room = require("../rooms/model-rooms");
+const User = require("../user/model-user");
 
 const stream = new Sse(); //create new stream
 

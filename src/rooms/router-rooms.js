@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Room = require("./model-rooms");
+const User = require("../user/model-user");
 
 function factory(stream) {
   //To use the stream, create a factory and wrap up the router in it, export the factory(see end page)
@@ -12,7 +13,7 @@ function factory(stream) {
   });
 
   router.post("/room", async (req, res, next) => {
-    console.log(req.body);
+    console.log("GOOOOOOOOD", req.body);
     try {
       const room = await Room.create({
         name: req.body.room
@@ -32,16 +33,40 @@ function factory(stream) {
     }
   });
 
-  router.get("/room/:id", (req, res, next) => {
+  router.get("/room/:id", async (req, res, next) => {
     const roomPicked = req.params.id;
-    console.log(roomPicked);
-    Room.findByPk(roomPicked).then(room => {
-      if (!room) {
-        res.status(404).send("room not found!");
-      } else {
-        res.json(room);
-      }
+
+    const room = await Room.findAll({
+      include: [
+        {
+          model: User,
+          where: { id: req.params.id },
+          required: false
+        }
+      ]
     });
+    console.log("HADSIUFHKADUHFIUADHFKDSHFKJHD", room);
+    if (!room) {
+      res.status(404).send("room not found!");
+    } else {
+      res.json(room);
+    }
+
+    // console.log(roomPicked);
+
+    // Room.findByPk(roomPicked).then(room => {
+    //   if (!room) {
+    //     res.status(404).send("room not found!");
+    //   } else {
+    //     res.json(room);
+    //   }
+    // });
+    // // const action = {
+    // //   type: "room/ROOM_ID",
+    // //   payload: roomPicked
+    // // };
+    // const getRoomString = JSON.stringify(action);
+    // stream.send(getRoomString);
   });
 
   return router;
