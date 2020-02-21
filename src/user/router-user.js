@@ -51,4 +51,22 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.get("/user/:id", (req, res, next) => {
+  const userId = req.params.id;
+  User.findByPk(userId).then(user => {
+    if (!user) {
+      res.status(404).send("User not found!");
+    } else {
+      res.json(user);
+    }
+  });
+});
+
+router.put("/user/:id", (req, res, next) =>
+  User.findByPk(req.params.id)
+    .then(user => user.update(req.body))
+    .then(user => res.send(user))
+    .catch(next)
+);
+
 module.exports = router;
